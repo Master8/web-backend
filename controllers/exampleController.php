@@ -22,9 +22,21 @@ class exampleController extends Controller {
 		}
 	}
 
-	public function edit($id){
-		// НАПИШИТЕ РЕАЛИЗАЦИЮ метода save в классе Model
+	public function edit($data){
 
-	}	
+        parse_str(file_get_contents("php://input"),$post_vars);
+
+	    if(isset($post_vars['title'])){
+
+            $dataToSave=array('title'=>$post_vars['title']);
+            $example = $this->model->save($data['id'], $dataToSave);
+            $this->setResponce($example);
+        }
+	}
+
+	public function delete($data) {
+        $example = $this->model->delete($data['id']);
+        $this->setResponce($example);
+    }
 
 }
