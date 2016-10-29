@@ -47,7 +47,9 @@ class Model{
         $data = file_get_contents($this->dataFileName);
         $data = json_decode($data, true);
 
-        $data[$id] = $item;
+        if(array_key_exists($id, $data)){
+            $data[$id] = $item;
+        }
 
         return file_put_contents($this->dataFileName, json_encode($data));
 	}
