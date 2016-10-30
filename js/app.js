@@ -12,8 +12,11 @@ app.config(function($routeProvider) {
     })
     .otherwise("/page/start");
 })
-.controller("pagesController",function($scope,$log,$rootScope,$routeParams,$interval){
+.controller("pagesController",function($scope,$http){
 
+	$http.get("?controller=user").success(function (data) {
+		$scope.users = data;
+	});
 })
 .controller("menuController", function ($scope, $http) {
 	$http.get("?controller=menu").success(function (data) {
