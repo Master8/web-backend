@@ -108,3 +108,21 @@ ul {
 .image-about {
     width: 100%;
 }
+
+.page-main {
+    margin: 5%;
+    background-color: #353535;
+    opacity: 0.95;
+    padding: 4% 5%;
+    font-size: large;
+    height: 300px;
+}
+
+.pokemon {
+    width: 60px;
+    height: 60px;
+}
+
+.image-pokemon {
+    width: 100%;
+}

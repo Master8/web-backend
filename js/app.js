@@ -12,11 +12,26 @@ app.config(function($routeProvider) {
     })
     .otherwise("/page/start");
 })
-.controller("pagesController",function($scope,$http){
+.controller("pagesController",function($scope, $http, $interval){
+
+	$scope.x = 100;
+	$scope.y = 70;
 
 	$http.get("?controller=user").success(function (data) {
 		$scope.users = data;
 	});
+
+	var animation, time = 0;
+
+	var startAnimation = function () {
+		animation = $interval(function () {
+			time++;
+			$scope.x += 7*Math.sin(time/50);
+			$scope.y += 5*Math.cos(time/20);
+		}, 50);
+	};
+
+	startAnimation();
 })
 .controller("menuController", function ($scope, $http) {
 	$http.get("?controller=menu").success(function (data) {
