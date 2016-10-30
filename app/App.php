@@ -8,7 +8,7 @@ class App{
 	private $action='index';
 	// 
 	private $request=array();
-	private $responce=array();	
+	private $responce=array();
 
 
 	// метод вызывающийся при создании класса

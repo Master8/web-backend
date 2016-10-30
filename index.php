@@ -24,8 +24,16 @@ $app=new App(); // создаем экземпляр приложения
 $response = $app->run();// запускаем приложение. Его ответ помещаем в переменную
 if($response){
 	// если приложение ответило данными - выводим их
-	header('Content-Type: application/json');
-	echo json_encode($response);
+
+    if (is_array($response))
+    {
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+	else
+    {
+        echo $response;
+    }
 }else{
 	header("HTTP/1.0 404 Not Found"); // если ответило false то выводим ошибку
 }
