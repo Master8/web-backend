@@ -1,1 +1,1 @@
-[{"id":"0", "title":"First item", "href":"page1"}, {"id":"1", "title":"Second item", "href":"page2"}, {"id":"2", "title":"Third item", "href":"page3"}]
+[{"id":"0", "title":"Start", "href":"#/page/start"}, {"id":"1", "title":"About", "href":"#/page/about"}, {"id":"2", "title":"Top list", "href":"#/page/top_list"}]

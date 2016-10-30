@@ -15,6 +15,7 @@ class indexController extends Controller {
             <title>Pokemon Go</title>
         </head>
             <body>
+                <header></header>
                 <ng-view></ng-view>
             </body>
         </html>";
