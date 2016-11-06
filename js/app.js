@@ -31,7 +31,7 @@ app.config(function($routeProvider) {
 
 		if (($scope.health - 2 * parseInt($rootScope.currentPower)) <= 0)
 		{
-			$scope.score = 0;
+			$scope.health = 0;
 			$rootScope.$emit('endGame');
 		}
 		else
@@ -65,13 +65,13 @@ app.config(function($routeProvider) {
 
 	var current = 0;
 	var isEnd = false;
-	$scope.power = 15;
-	$scope.speed = 4;
+	$scope.power = 0;
+	$scope.speed = 1;
 	$scope.image = "images/pokemons/1.png";
 	$scope.active = "hidden";
 
 	var timer;
-	$scope.x = 0;
+	$scope.x = 50;
 	$scope.y = 20;
 
 	var animation, time = 0;
@@ -79,14 +79,14 @@ app.config(function($routeProvider) {
 	$scope.move = function () {
 		$scope.active = "visible";
 		animation = $interval(function () {
-			time++;
-			$scope.x += 5*Math.sin(time/50);
-			$scope.y += 2*Math.cos(time/20);
-		}, 50);
+			time += parseInt($scope.speed) / 2;
+			$scope.x = 40*Math.sin(time/60) + 50;
+			$scope.y = 20*Math.cos(time/20) + 20;
+		}, 30);
 
 		timer = $timeout(function () {
 			$scope.notCaught();
-		}, 7000)
+		}, 8000)
 	};
 
 	$scope.notCaught = function () {
@@ -104,7 +104,7 @@ app.config(function($routeProvider) {
 		$interval.cancel(animation);
 		$timeout.cancel(timer);
 		time = 0;
-		$scope.x = 0;
+		$scope.x = 50;
 		$scope.y = 20;
 
 		if (!isEnd)
@@ -123,6 +123,7 @@ app.config(function($routeProvider) {
 			current++;
 
 			$scope.move();
+			$log.info($scope.speed);
 		}
 		else
 		{
