@@ -16,19 +16,45 @@ app.config(function($routeProvider) {
 
 
 })
-.controller("gameController", function ($scope) {
+.controller("gameController", function ($scope, $rootScope, $log) {
 
 	$scope.level = 0;
 	$scope.health = 100;
 	$scope.score = 0;
 
+	$rootScope.$on('caughtPokemon', function () {
+		$scope.level++;
+		$scope.score += parseInt($rootScope.currentPower);
+	});
+
+	$rootScope.$on('notCaughtPokemon', function () {
+
+		if (($scope.health - 2 * parseInt($rootScope.currentPower)) <= 0)
+		{
+			$scope.score = 0;
+			$rootScope.$emit('endGame');
+		}
+		else
+		{
+			$scope.level++;
+			$scope.health -= 2 * parseInt($rootScope.currentPower);
+		}
+	});
+
+	$rootScope.$on('endPokemons', function () {
+		$rootScope.$emit('endGame');
+	});
+
+	$rootScope.$on('endGame', function () {
+		//get username and post to server
+	});
 })
 .controller("menuController", function ($scope, $http) {
 	$http.get("?controller=menu").success(function (data) {
 		$scope.items = data;
 	});
 })
-.controller("pokemonController", function ($http, $scope, $interval, $timeout) {
+.controller("pokemonController", function ($http, $scope, $interval, $timeout, $rootScope, $log) {
 
 	var pokemons;
 
@@ -38,6 +64,7 @@ app.config(function($routeProvider) {
 	});
 
 	var current = 0;
+	var isEnd = false;
 	$scope.power = 15;
 	$scope.speed = 4;
 	$scope.image = "images/pokemons/1.png";
@@ -63,12 +90,12 @@ app.config(function($routeProvider) {
 	};
 
 	$scope.notCaught = function () {
-		$rootScope.$emit("notCaughtPokemon");
+		$rootScope.$emit('notCaughtPokemon');
 		$scope.stop();
 	};
 
 	$scope.caught = function () {
-		$rootScope.$emit("caughtPokemon");
+		$rootScope.$emit('caughtPokemon');
 		$scope.stop();
 	};
 
@@ -80,7 +107,8 @@ app.config(function($routeProvider) {
 		$scope.x = 0;
 		$scope.y = 20;
 
-		$scope.next();
+		if (!isEnd)
+			$scope.next();
 	};
 
 	$scope.next = function () {
@@ -88,6 +116,7 @@ app.config(function($routeProvider) {
 		if (current < pokemons.length)
 		{
 			$scope.power = pokemons[current].power;
+			$rootScope.currentPower = $scope.power;
 			$scope.speed = pokemons[current].speed;
 			$scope.image = pokemons[current].image;
 
@@ -97,9 +126,13 @@ app.config(function($routeProvider) {
 		}
 		else
 		{
-			$rootScope.$emit("endPokemons");
+			$rootScope.$emit('endPokemons');
 		}
 	};
+
+	$rootScope.$on('endGame', function () {
+		isEnd = true;
+	});
 })
 .directive("header", function(){
 	return {
