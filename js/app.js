@@ -12,13 +12,13 @@ app.config(function($routeProvider) {
     })
     .otherwise("/page/start");
 })
-.controller("pagesController",function($scope, $http, $interval){
+.controller("pagesController",function($scope, $http){
 
 	$http.get("?controller=user").success(function (data) {
 		$scope.users = data;
 	});
 })
-.controller("gameController", function ($scope, $rootScope, $http) {
+.controller("gameController", function ($scope, $rootScope, $http, $location) {
 
 	$scope.level = 0;
 	$scope.health = 100;
@@ -48,12 +48,17 @@ app.config(function($routeProvider) {
 	});
 
 	$rootScope.$on('endGame', function () {
-		$http.post("?controller=user",
-			{id:0, name: "Michael", score: $scope.score})
-			.success(function () {
-				
-			})
+		$rootScope.totalScore = $scope.score;
+		$location.path('/page/form');
 	});
+
+	$scope.sendData = function () {
+		$http.post("?controller=user",
+			{id:0, name: $scope.entername.username.$modelValue, score: $rootScope.totalScore})
+			.success(function () {
+				$location.path('/page/start');
+			})
+	}
 })
 .controller("menuController", function ($scope, $http) {
 	$http.get("?controller=menu").success(function (data) {
