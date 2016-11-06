@@ -14,9 +14,11 @@ app.config(function($routeProvider) {
 })
 .controller("pagesController",function($scope, $http, $interval){
 
-
+	$http.get("?controller=user").success(function (data) {
+		$scope.users = data;
+	});
 })
-.controller("gameController", function ($scope, $rootScope, $log) {
+.controller("gameController", function ($scope, $rootScope, $http) {
 
 	$scope.level = 0;
 	$scope.health = 100;
@@ -46,7 +48,11 @@ app.config(function($routeProvider) {
 	});
 
 	$rootScope.$on('endGame', function () {
-		//get username and post to server
+		$http.post("?controller=user",
+			{id:0, name: "Michael", score: $scope.score})
+			.success(function () {
+				
+			})
 	});
 })
 .controller("menuController", function ($scope, $http) {
@@ -54,7 +60,7 @@ app.config(function($routeProvider) {
 		$scope.items = data;
 	});
 })
-.controller("pokemonController", function ($http, $scope, $interval, $timeout, $rootScope, $log) {
+.controller("pokemonController", function ($http, $scope, $interval, $timeout, $rootScope) {
 
 	var pokemons;
 
@@ -81,7 +87,7 @@ app.config(function($routeProvider) {
 		animation = $interval(function () {
 			time += parseInt($scope.speed) / 2;
 			$scope.x = 40*Math.sin(time/60) + 50;
-			$scope.y = 20*Math.cos(time/20) + 20;
+			$scope.y = 15*Math.cos(time/20) + 20;
 		}, 30);
 
 		timer = $timeout(function () {
@@ -96,13 +102,13 @@ app.config(function($routeProvider) {
 
 	$scope.caught = function () {
 		$rootScope.$emit('caughtPokemon');
+		$timeout.cancel(timer);
 		$scope.stop();
 	};
 
 	$scope.stop = function () {
 		$scope.active = "hidden";
 		$interval.cancel(animation);
-		$timeout.cancel(timer);
 		time = 0;
 		$scope.x = 50;
 		$scope.y = 20;
@@ -123,7 +129,6 @@ app.config(function($routeProvider) {
 			current++;
 
 			$scope.move();
-			$log.info($scope.speed);
 		}
 		else
 		{
