@@ -21,19 +21,12 @@ define('DATA_FOLDER',BASE_DIR.DS.'data');
 
 
 $app=new App(); // создаем экземпляр приложения
-$response = $app->run();// запускаем приложение. Его ответ помещаем в переменную
-if($response){
+$responce = $app->run();// запускаем приложение. Его ответ помещаем в переменную
+if($responce){
 	// если приложение ответило данными - выводим их
 
-    if (is_array($response))
-    {
-        header('Content-Type: application/json');
-        echo json_encode($response);
-    }
-	else
-    {
-        echo $response;
-    }
+    echo $responce;
+
 }else{
 	header("HTTP/1.0 404 Not Found"); // если ответило false то выводим ошибку
 }
